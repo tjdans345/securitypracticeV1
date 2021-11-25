@@ -1,0 +1,17 @@
+application:
+  version: v1.0.0
+  title : boot-security
+
+spring:
+  datasource:
+    hikari:
+      driver-class-name: org.mariadb.jdbc.Driver
+      jdbc-url: jdbc:mariadb://localhost:3306/test_db?characterEncoding=UTF-8
+      username: meteor
+      password:
+
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
