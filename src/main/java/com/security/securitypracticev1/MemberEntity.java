@@ -19,12 +19,10 @@ public class MemberEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idx;
 
+    private String name;
 
+    private String account;
 
-
-
-
-
-
+    private String password;
 
 }

@@ -3,6 +3,7 @@ package com.security.securitypracticev1.security;
 
 import com.security.securitypracticev1.MemberService;
 import com.security.securitypracticev1.security.auth.SecurityService;
+import com.security.securitypracticev1.security.custom.AuthFailureHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,10 +23,12 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private SecurityService securityService;
+    private AuthFailureHandler authFailureHandler;
 
     @Autowired
-    public SecurityConfig(SecurityService securityService) {
+    public SecurityConfig(SecurityService securityService, AuthFailureHandler authFailureHandler) {
         this.securityService = securityService;
+        this.authFailureHandler = authFailureHandler;
     }
 
     @Bean
@@ -57,8 +60,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/**").permitAll();
 
         http.formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/")
+                .loginPage("/v1/security/login")
+                .defaultSuccessUrl("/home")
+                .failureHandler(authFailureHandler)
                 .permitAll();
 
         /**
@@ -69,14 +73,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
          */
         http.logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login")
+                .logoutSuccessUrl("/v1/security/login")
                 .invalidateHttpSession(true);
 
         /**
          * 권한 없는 사용자가 접근했을 경우 이동할 경로를 지정하는 부분
          */
         http.exceptionHandling()
-                .accessDeniedPage("/login");
+                .accessDeniedPage("/v1/security/login");
     }
 
     /**
